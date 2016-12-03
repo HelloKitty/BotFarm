@@ -22,6 +22,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BotFarm UnitTests", "tests\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrinityCore UnitTests", "tests\TrinityCore UnitTests\TrinityCore UnitTests.csproj", "{20DB95E0-F311-4E8A-B956-04E995F3184A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PacketHandler", "PacketHandler\PacketHandler.csproj", "{911FCB3D-6637-4BD0-BEA5-2E8857AAB693}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -70,6 +72,14 @@ Global
 		{20DB95E0-F311-4E8A-B956-04E995F3184A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{20DB95E0-F311-4E8A-B956-04E995F3184A}.Release|x64.ActiveCfg = Release|x64
 		{20DB95E0-F311-4E8A-B956-04E995F3184A}.Release|x64.Build.0 = Release|x64
+		{911FCB3D-6637-4BD0-BEA5-2E8857AAB693}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{911FCB3D-6637-4BD0-BEA5-2E8857AAB693}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{911FCB3D-6637-4BD0-BEA5-2E8857AAB693}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{911FCB3D-6637-4BD0-BEA5-2E8857AAB693}.Debug|x64.Build.0 = Debug|Any CPU
+		{911FCB3D-6637-4BD0-BEA5-2E8857AAB693}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{911FCB3D-6637-4BD0-BEA5-2E8857AAB693}.Release|Any CPU.Build.0 = Release|Any CPU
+		{911FCB3D-6637-4BD0-BEA5-2E8857AAB693}.Release|x64.ActiveCfg = Release|Any CPU
+		{911FCB3D-6637-4BD0-BEA5-2E8857AAB693}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -80,6 +90,7 @@ Global
 		{5830EEBA-EAE6-4CF8-8348-8CF807ABBE47} = {56969AB7-2496-42D2-9224-9D915849193D}
 		{D013693E-11A8-41E3-825F-38D9F47C2B14} = {FB1EFB38-EBF4-4A83-B6A8-7CCD16626CF8}
 		{20DB95E0-F311-4E8A-B956-04E995F3184A} = {FB1EFB38-EBF4-4A83-B6A8-7CCD16626CF8}
+		{911FCB3D-6637-4BD0-BEA5-2E8857AAB693} = {56969AB7-2496-42D2-9224-9D915849193D}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = CLIClient\CLI.csproj

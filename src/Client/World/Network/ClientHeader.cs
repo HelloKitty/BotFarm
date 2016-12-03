@@ -1,10 +1,11 @@
 ﻿using System;
+using WoW.API;
 
 namespace Client.World.Network
 {
 	class ClientHeader : Header
 	{
-		public WorldCommand Command { get; private set; }
+		public NetworkOperationCode Command { get; private set; }
 		private byte[] encryptedCommand;
 		public byte[] EncryptedCommand(AuthenticationCrypto authenticationCrypto)
 		{
@@ -34,7 +35,7 @@ namespace Client.World.Network
 
 		private OutPacket Packet;
 
-		public ClientHeader(WorldCommand command, OutPacket packet)
+		public ClientHeader(NetworkOperationCode command, OutPacket packet)
 		{
 			this.Command = command;
 			Packet = packet;

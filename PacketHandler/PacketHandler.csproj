@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{E48C7F9F-68B5-4F17-A6D6-A9E3E6DA913B}</ProjectGuid>
+    <ProjectGuid>{911FCB3D-6637-4BD0-BEA5-2E8857AAB693}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WoW.API</RootNamespace>
-    <AssemblyName>WoW.API</AssemblyName>
+    <RootNamespace>PacketHandler</RootNamespace>
+    <AssemblyName>PacketHandler</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -40,13 +40,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Entity\GUID\HighGuid.cs" />
-    <Compile Include="Entity\GUID\ObjectGuid.cs" />
-    <Compile Include="Network\NetworkOperationCode.cs" />
+    <Compile Include="Attributes\PacketHandlerAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Extensions\" />
+    <ProjectReference Include="..\src\WoW.API\WoW.API.csproj">
+      <Project>{e48c7f9f-68b5-4f17-a6d6-a9e3e6da913b}</Project>
+      <Name>WoW.API</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

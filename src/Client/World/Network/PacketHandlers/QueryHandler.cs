@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
 using Client.Chat;
 using Client.Chat.Definitions;
+using WoW.API;
 
 namespace Client.World.Network
 {
 	public partial class WorldSocket
 	{
-		[PacketHandler(WorldCommand.SMSG_NAME_QUERY_RESPONSE)]
+		[PacketHandler(NetworkOperationCode.SMSG_NAME_QUERY_RESPONSE)]
 		protected void HandleNameQueryResponse(InPacket packet)
 		{
 			var pguid = packet.ReadPackedGuid();

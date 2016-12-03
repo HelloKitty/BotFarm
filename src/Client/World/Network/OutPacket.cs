@@ -4,6 +4,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using WoW.API;
 
 namespace Client.World.Network
 {
@@ -14,7 +15,7 @@ namespace Client.World.Network
 		protected readonly MemoryStream Buffer;
 		protected byte[] FinalizedPacket;
 
-		public OutPacket(WorldCommand command, int emptyOffset = 0)
+		public OutPacket(NetworkOperationCode command, int emptyOffset = 0)
 			: base()
 		{
 			this.Header = new ClientHeader(command, this);
@@ -131,7 +132,7 @@ namespace Client.World.Network
 			set;
 		}
 
-		public MovementPacket(WorldCommand command)
+		public MovementPacket(NetworkOperationCode command)
 			: base(command)
 		{
 			time = (uint)(DateTime.Now - Process.GetCurrentProcess().StartTime).TotalMilliseconds;

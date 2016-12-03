@@ -242,7 +242,7 @@ namespace Client
             ClearTriggers();
             if (LoggedIn)
             {
-                OutPacket logout = new OutPacket(WorldCommand.CMSG_LOGOUT_REQUEST);
+                OutPacket logout = new OutPacket(NetworkOperationCode.CMSG_LOGOUT_REQUEST);
                 SendPacket(logout);
                 await loggedOutEvent.Task;
             }
@@ -278,7 +278,7 @@ namespace Client
         public override void PresentCharacterList(Character[] characterList)
         {
             World.SelectedCharacter = characterList[Character];
-            OutPacket packet = new OutPacket(WorldCommand.CMSG_PLAYER_LOGIN);
+            OutPacket packet = new OutPacket(NetworkOperationCode.CMSG_PLAYER_LOGIN);
             packet.Write(World.SelectedCharacter.GUID);
             SendPacket(packet);
             LoggedIn = true;
@@ -341,7 +341,7 @@ namespace Client
         public void CreateCharacter(Race race, Class classWow)
         {
             Log("Creating new character");
-            OutPacket createCharacterPacket = new OutPacket(WorldCommand.CMSG_CHAR_CREATE);
+            OutPacket createCharacterPacket = new OutPacket(NetworkOperationCode.CMSG_CHAR_CREATE);
             StringBuilder charName = new StringBuilder("Bot");
             foreach (char c in Username.Substring(3).Take(9))
 	        {
@@ -432,7 +432,7 @@ namespace Client
         #region Commands
         public void DoSayChat(string message)
         {
-            var response = new OutPacket(WorldCommand.CMSG_MESSAGECHAT);
+            var response = new OutPacket(NetworkOperationCode.CMSG_MESSAGECHAT);
 
             response.Write((uint)ChatMessageType.Say);
             var race = World.SelectedCharacter.Race;
@@ -444,7 +444,7 @@ namespace Client
 
         public void DoPartyChat(string message)
         {
-            var response = new OutPacket(WorldCommand.CMSG_MESSAGECHAT);
+            var response = new OutPacket(NetworkOperationCode.CMSG_MESSAGECHAT);
 
             response.Write((uint)ChatMessageType.Party);
             var race = World.SelectedCharacter.Race;
@@ -456,7 +456,7 @@ namespace Client
 
         public void DoGuildChat(string message)
         {
-            var response = new OutPacket(WorldCommand.CMSG_MESSAGECHAT);
+            var response = new OutPacket(NetworkOperationCode.CMSG_MESSAGECHAT);
 
             response.Write((uint)ChatMessageType.Guild);
             var race = World.SelectedCharacter.Race;
@@ -468,7 +468,7 @@ namespace Client
 
         public void DoWhisperChat(string message, string player)
         {
-            var response = new OutPacket(WorldCommand.CMSG_MESSAGECHAT);
+            var response = new OutPacket(NetworkOperationCode.CMSG_MESSAGECHAT);
 
             response.Write((uint)ChatMessageType.Whisper);
             var race = World.SelectedCharacter.Race;
@@ -496,7 +496,7 @@ namespace Client
         #region Actions
         public void DoTextEmote(TextEmote emote)
         {
-            var packet = new OutPacket(WorldCommand.CMSG_TEXT_EMOTE);
+            var packet = new OutPacket(NetworkOperationCode.CMSG_TEXT_EMOTE);
             packet.Write((uint)emote);
             packet.Write((uint)0);
             packet.Write((ulong)0);
@@ -507,7 +507,7 @@ namespace Client
         {
             if (!Player.GetPosition().IsValid)
                 return;
-            var packet = new OutPacket(WorldCommand.MSG_MOVE_SET_FACING);
+            var packet = new OutPacket(NetworkOperationCode.MSG_MOVE_SET_FACING);
             packet.WritePacketGuid(Player.GUID);
             packet.Write((UInt32)0); //flags
             packet.Write((UInt16)0); //flags2
@@ -549,7 +549,7 @@ namespace Client
                 {
                     if (path != null)
                     {
-                        var stopMoving = new MovementPacket(WorldCommand.MSG_MOVE_STOP)
+                        var stopMoving = new MovementPacket(NetworkOperationCode.MSG_MOVE_STOP)
                         {
                             GUID = Player.GUID,
                             X = Player.X,
@@ -596,7 +596,7 @@ namespace Client
                 if (!moving)
                 {
                     moving = true;
-                    var facing = new MovementPacket(WorldCommand.MSG_MOVE_SET_FACING)
+                    var facing = new MovementPacket(NetworkOperationCode.MSG_MOVE_SET_FACING)
                     {
                         GUID = Player.GUID,
                         flags = MovementFlags.MOVEMENTFLAG_FORWARD,
@@ -609,7 +609,7 @@ namespace Client
                     SendPacket(facing);
                     Player.SetPosition(facing.GetPosition());
 
-                    var startMoving = new MovementPacket(WorldCommand.MSG_MOVE_START_FORWARD)
+                    var startMoving = new MovementPacket(NetworkOperationCode.MSG_MOVE_START_FORWARD)
                     {
                         GUID = Player.GUID,
                         flags = MovementFlags.MOVEMENTFLAG_FORWARD,
@@ -628,7 +628,7 @@ namespace Client
                 Player.SetPosition(progressPosition.X, progressPosition.Y, progressPosition.Z);
                 previousMovingTime = DateTime.Now;
 
-                var heartbeat = new MovementPacket(WorldCommand.MSG_MOVE_HEARTBEAT)
+                var heartbeat = new MovementPacket(NetworkOperationCode.MSG_MOVE_HEARTBEAT)
                 {
                     GUID = Player.GUID,
                     flags = MovementFlags.MOVEMENTFLAG_FORWARD,
@@ -643,7 +643,7 @@ namespace Client
         #endregion
 
         #region Packet Handlers
-        [PacketHandler(WorldCommand.SMSG_LOGIN_VERIFY_WORLD)]
+        [PacketHandler(NetworkOperationCode.SMSG_LOGIN_VERIFY_WORLD)]
         protected void HandleLoginVerifyWorld(InPacket packet)
         {
             Player.MapID = (int)packet.ReadUInt32();
@@ -653,7 +653,7 @@ namespace Client
             Player.O = packet.ReadSingle();
         }
 
-        [PacketHandler(WorldCommand.SMSG_NEW_WORLD)]
+        [PacketHandler(NetworkOperationCode.SMSG_NEW_WORLD)]
         protected void HandleNewWorld(InPacket packet)
         {
             Player.MapID = (int)packet.ReadUInt32();
@@ -662,18 +662,18 @@ namespace Client
             Player.Z = packet.ReadSingle();
             Player.O = packet.ReadSingle();
 
-            OutPacket result = new OutPacket(WorldCommand.MSG_MOVE_WORLDPORT_ACK);
+            OutPacket result = new OutPacket(NetworkOperationCode.MSG_MOVE_WORLDPORT_ACK);
             SendPacket(result);
         }
 
-        [PacketHandler(WorldCommand.SMSG_TRANSFER_PENDING)]
+        [PacketHandler(NetworkOperationCode.SMSG_TRANSFER_PENDING)]
         protected void HandleTransferPending(InPacket packet)
         {
             Player.ResetPosition();
             var newMap = packet.ReadUInt32();
         }
 
-        [PacketHandler(WorldCommand.MSG_MOVE_TELEPORT_ACK)]
+        [PacketHandler(NetworkOperationCode.MSG_MOVE_TELEPORT_ACK)]
         protected void HandleMoveTeleportAck(InPacket packet)
         {
             var packGuid = packet.ReadPackedGuid();
@@ -688,24 +688,24 @@ namespace Client
 
             CancelActionsByFlag(ActionFlag.Movement, false);
 
-            OutPacket result = new OutPacket(WorldCommand.MSG_MOVE_TELEPORT_ACK);
+            OutPacket result = new OutPacket(NetworkOperationCode.MSG_MOVE_TELEPORT_ACK);
             result.WritePacketGuid(Player.GUID);
             result.Write((UInt32)0);
             result.Write(time);
             SendPacket(result);
         }
 
-        [PacketHandler(WorldCommand.SMSG_CHAR_CREATE)]
+        [PacketHandler(NetworkOperationCode.SMSG_CHAR_CREATE)]
         protected void HandleCharCreate(InPacket packet)
         {
             var response = (CommandDetail)packet.ReadByte();
             if (response == CommandDetail.CHAR_CREATE_SUCCESS)
-                SendPacket(new OutPacket(WorldCommand.CMSG_CHAR_ENUM));
+                SendPacket(new OutPacket(NetworkOperationCode.CMSG_CHAR_ENUM));
             else
                 NoCharactersFound();
         }
 
-        [PacketHandler(WorldCommand.SMSG_LOGOUT_RESPONSE)]
+        [PacketHandler(NetworkOperationCode.SMSG_LOGOUT_RESPONSE)]
         protected void HandleLogoutResponse(InPacket packet)
         {
             bool logoutOk = packet.ReadUInt32() == 0;
@@ -719,7 +719,7 @@ namespace Client
             }
         }
 
-        [PacketHandler(WorldCommand.SMSG_LOGOUT_COMPLETE)]
+        [PacketHandler(NetworkOperationCode.SMSG_LOGOUT_COMPLETE)]
         protected void HandleLogoutComplete(InPacket packet)
         {
             Connected = false;
@@ -728,48 +728,48 @@ namespace Client
             loggedOutEvent.SetResult(true);
         }
 
-        [PacketHandler(WorldCommand.SMSG_UPDATE_OBJECT)]
+        [PacketHandler(NetworkOperationCode.SMSG_UPDATE_OBJECT)]
         protected void HandleUpdateObject(InPacket packet)
         {
             updateObjectHandler.HandleUpdatePacket(packet);
         }
 
-        [PacketHandler(WorldCommand.SMSG_COMPRESSED_UPDATE_OBJECT)]
+        [PacketHandler(NetworkOperationCode.SMSG_COMPRESSED_UPDATE_OBJECT)]
         protected void HandleCompressedUpdateObject(InPacket packet)
         {
             updateObjectHandler.HandleUpdatePacket(packet.Inflate());
         }
 
-        [PacketHandler(WorldCommand.SMSG_MONSTER_MOVE)]
+        [PacketHandler(NetworkOperationCode.SMSG_MONSTER_MOVE)]
         protected void HandleMonsterMove(InPacket packet)
         {
             updateObjectHandler.HandleMonsterMovementPacket(packet);
         }
 
-        [PacketHandler(WorldCommand.MSG_MOVE_START_FORWARD)]
-        [PacketHandler(WorldCommand.MSG_MOVE_START_BACKWARD)]
-        [PacketHandler(WorldCommand.MSG_MOVE_STOP)]
-        [PacketHandler(WorldCommand.MSG_MOVE_START_STRAFE_LEFT)]
-        [PacketHandler(WorldCommand.MSG_MOVE_START_STRAFE_RIGHT)]
-        [PacketHandler(WorldCommand.MSG_MOVE_STOP_STRAFE)]
-        [PacketHandler(WorldCommand.MSG_MOVE_JUMP)]
-        [PacketHandler(WorldCommand.MSG_MOVE_START_TURN_LEFT)]
-        [PacketHandler(WorldCommand.MSG_MOVE_START_TURN_RIGHT)]
-        [PacketHandler(WorldCommand.MSG_MOVE_STOP_TURN)]
-        [PacketHandler(WorldCommand.MSG_MOVE_START_PITCH_UP)]
-        [PacketHandler(WorldCommand.MSG_MOVE_START_PITCH_DOWN)]
-        [PacketHandler(WorldCommand.MSG_MOVE_STOP_PITCH)]
-        [PacketHandler(WorldCommand.MSG_MOVE_SET_RUN_MODE)]
-        [PacketHandler(WorldCommand.MSG_MOVE_SET_WALK_MODE)]
-        [PacketHandler(WorldCommand.MSG_MOVE_FALL_LAND)]
-        [PacketHandler(WorldCommand.MSG_MOVE_START_SWIM)]
-        [PacketHandler(WorldCommand.MSG_MOVE_STOP_SWIM)]
-        [PacketHandler(WorldCommand.MSG_MOVE_SET_FACING)]
-        [PacketHandler(WorldCommand.MSG_MOVE_SET_PITCH)]
-        [PacketHandler(WorldCommand.MSG_MOVE_HEARTBEAT)]
-        [PacketHandler(WorldCommand.MSG_MOVE_START_ASCEND)]
-        [PacketHandler(WorldCommand.MSG_MOVE_STOP_ASCEND)]
-        [PacketHandler(WorldCommand.MSG_MOVE_START_DESCEND)]
+        [PacketHandler(NetworkOperationCode.MSG_MOVE_START_FORWARD)]
+        [PacketHandler(NetworkOperationCode.MSG_MOVE_START_BACKWARD)]
+        [PacketHandler(NetworkOperationCode.MSG_MOVE_STOP)]
+        [PacketHandler(NetworkOperationCode.MSG_MOVE_START_STRAFE_LEFT)]
+        [PacketHandler(NetworkOperationCode.MSG_MOVE_START_STRAFE_RIGHT)]
+        [PacketHandler(NetworkOperationCode.MSG_MOVE_STOP_STRAFE)]
+        [PacketHandler(NetworkOperationCode.MSG_MOVE_JUMP)]
+        [PacketHandler(NetworkOperationCode.MSG_MOVE_START_TURN_LEFT)]
+        [PacketHandler(NetworkOperationCode.MSG_MOVE_START_TURN_RIGHT)]
+        [PacketHandler(NetworkOperationCode.MSG_MOVE_STOP_TURN)]
+        [PacketHandler(NetworkOperationCode.MSG_MOVE_START_PITCH_UP)]
+        [PacketHandler(NetworkOperationCode.MSG_MOVE_START_PITCH_DOWN)]
+        [PacketHandler(NetworkOperationCode.MSG_MOVE_STOP_PITCH)]
+        [PacketHandler(NetworkOperationCode.MSG_MOVE_SET_RUN_MODE)]
+        [PacketHandler(NetworkOperationCode.MSG_MOVE_SET_WALK_MODE)]
+        [PacketHandler(NetworkOperationCode.MSG_MOVE_FALL_LAND)]
+        [PacketHandler(NetworkOperationCode.MSG_MOVE_START_SWIM)]
+        [PacketHandler(NetworkOperationCode.MSG_MOVE_STOP_SWIM)]
+        [PacketHandler(NetworkOperationCode.MSG_MOVE_SET_FACING)]
+        [PacketHandler(NetworkOperationCode.MSG_MOVE_SET_PITCH)]
+        [PacketHandler(NetworkOperationCode.MSG_MOVE_HEARTBEAT)]
+        [PacketHandler(NetworkOperationCode.MSG_MOVE_START_ASCEND)]
+        [PacketHandler(NetworkOperationCode.MSG_MOVE_STOP_ASCEND)]
+        [PacketHandler(NetworkOperationCode.MSG_MOVE_START_DESCEND)]
         protected void HandleMove(InPacket packet)
         {
             updateObjectHandler.HandleMovementPacket(packet);
@@ -1045,7 +1045,7 @@ namespace Client
 
                                 if (worldObject.GUID.isType(HighGuid.Player))
                                 {
-                                    OutPacket nameQuery = new OutPacket(WorldCommand.CMSG_NAME_QUERY);
+                                    OutPacket nameQuery = new OutPacket(NetworkOperationCode.CMSG_NAME_QUERY);
                                     nameQuery.Write(guid);
                                     game.SendPacket(nameQuery);
                                 }
@@ -1068,7 +1068,7 @@ namespace Client
             }
         }
 
-        [PacketHandler(WorldCommand.SMSG_DESTROY_OBJECT)]
+        [PacketHandler(NetworkOperationCode.SMSG_DESTROY_OBJECT)]
         protected void HandleDestroyObject(InPacket packet)
         {
             ulong guid = packet.ReadUInt64();
@@ -1080,7 +1080,7 @@ namespace Client
             }
         }
 
-        [PacketHandler(WorldCommand.SMSG_ALL_ACHIEVEMENT_DATA)]
+        [PacketHandler(NetworkOperationCode.SMSG_ALL_ACHIEVEMENT_DATA)]
         protected void HandleAllAchievementData(InPacket packet)
         {
             CompletedAchievements.Clear();
@@ -1113,7 +1113,7 @@ namespace Client
             }
         }
 
-        [PacketHandler(WorldCommand.SMSG_CRITERIA_UPDATE)]
+        [PacketHandler(NetworkOperationCode.SMSG_CRITERIA_UPDATE)]
         protected void HandleCriteriaUpdate(InPacket packet)
         {
             uint criteriaId = packet.ReadUInt32();
@@ -1122,7 +1122,7 @@ namespace Client
             AchievementCriterias[criteriaId] = criteriaCounter;
         }
 
-        [PacketHandler(WorldCommand.SMSG_GROUP_LIST)]
+        [PacketHandler(NetworkOperationCode.SMSG_GROUP_LIST)]
         protected void HandlePartyList(InPacket packet)
         {
             GroupType groupType = (GroupType)packet.ReadByte();
@@ -1151,7 +1151,7 @@ namespace Client
             GroupLeaderGuid = packet.ReadUInt64();
         }
 
-        [PacketHandler(WorldCommand.SMSG_GROUP_DESTROYED)]
+        [PacketHandler(NetworkOperationCode.SMSG_GROUP_DESTROYED)]
         protected void HandlePartyDisband(InPacket packet)
         {
             GroupLeaderGuid = 0;

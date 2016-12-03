@@ -63,10 +63,10 @@ namespace BotFarm
 				{ 
 					new UpdateFieldTriggerAction((int)PlayerField.PLAYER_FLAGS, (uint)PlayerFlags.PLAYER_FLAGS_GHOST, () =>
 						{
-							OutPacket corpseQuery = new OutPacket(WorldCommand.MSG_CORPSE_QUERY);
+							OutPacket corpseQuery = new OutPacket(NetworkOperationCode.MSG_CORPSE_QUERY);
 							SendPacket(corpseQuery);
 						}),
-					new OpcodeTriggerAction(WorldCommand.MSG_CORPSE_QUERY, packet =>
+					new OpcodeTriggerAction(NetworkOperationCode.MSG_CORPSE_QUERY, packet =>
 					{
 						var inPacket = packet as InPacket;
 						if (inPacket == null)
@@ -106,7 +106,7 @@ namespace BotFarm
 						return false;
 					},() => 
 					  {
-						  OutPacket reclaimCorpse = new OutPacket(WorldCommand.CMSG_RECLAIM_CORPSE);
+						  OutPacket reclaimCorpse = new OutPacket(NetworkOperationCode.CMSG_RECLAIM_CORPSE);
 						  reclaimCorpse.Write(Player.GUID);
 						  SendPacket(reclaimCorpse);
 					  })
@@ -216,25 +216,25 @@ namespace BotFarm
 		}
 
 		#region Handlers
-		[PacketHandler(WorldCommand.SMSG_GROUP_INVITE)]
+		[PacketHandler(NetworkOperationCode.SMSG_GROUP_INVITE)]
 		protected void HandlePartyInvite(InPacket packet)
 		{
 			/*if(Behavior.AutoAcceptGroupInvites)
-				SendPacket(new OutPacket(WorldCommand.CMSG_GROUP_ACCEPT, 4));*/
+				SendPacket(new OutPacket(NetworkOperationCode.CMSG_GROUP_ACCEPT, 4));*/
 		}
 
-		[PacketHandler(WorldCommand.SMSG_RESURRECT_REQUEST)]
+		[PacketHandler(NetworkOperationCode.SMSG_RESURRECT_REQUEST)]
 		protected void HandleResurrectRequest(InPacket packet)
 		{
 			var resurrectorGuid = packet.ReadUInt64();
-			OutPacket response = new OutPacket(WorldCommand.CMSG_RESURRECT_RESPONSE);
+			OutPacket response = new OutPacket(NetworkOperationCode.CMSG_RESURRECT_RESPONSE);
 			response.Write(resurrectorGuid);
 			/*if (Behavior.AutoAcceptResurrectRequests)
 			{
 				response.Write((byte)1);
 				SendPacket(response);
 
-				OutPacket result = new OutPacket(WorldCommand.MSG_MOVE_TELEPORT_ACK);
+				OutPacket result = new OutPacket(NetworkOperationCode.MSG_MOVE_TELEPORT_ACK);
 				result.WritePacketGuid(Player.GUID);
 				result.Write((UInt32)0);
 				result.Write(DateTime.Now.Millisecond);
@@ -247,13 +247,13 @@ namespace BotFarm
 			}*/
 		}
 
-		[PacketHandler(WorldCommand.SMSG_CORPSE_RECLAIM_DELAY)]
+		[PacketHandler(NetworkOperationCode.SMSG_CORPSE_RECLAIM_DELAY)]
 		protected void HandleCorpseReclaimDelay(InPacket packet)
 		{
 			CorpseReclaim = DateTime.Now.AddMilliseconds(packet.ReadUInt32());
 		}
 
-		[PacketHandler(WorldCommand.SMSG_TRADE_STATUS)]
+		[PacketHandler(NetworkOperationCode.SMSG_TRADE_STATUS)]
 		protected void HandleTradeStatus(InPacket packet)
 		{
 			/*if (Behavior.Begger)
@@ -266,7 +266,7 @@ namespace BotFarm
 						// Stop moving
 						CancelActionsByFlag(ActionFlag.Movement);
 						// Accept trade
-						OutPacket beginTrade = new OutPacket(WorldCommand.CMSG_BEGIN_TRADE);
+						OutPacket beginTrade = new OutPacket(NetworkOperationCode.CMSG_BEGIN_TRADE);
 						SendPacket(beginTrade);
 						break;
 					case TradeStatus.Canceled:
@@ -274,7 +274,7 @@ namespace BotFarm
 						TraderGUID = 0;
 						break;
 					case TradeStatus.Accept:
-						OutPacket acceptTrade = new OutPacket(WorldCommand.CMSG_ACCEPT_TRADE);
+						OutPacket acceptTrade = new OutPacket(NetworkOperationCode.CMSG_ACCEPT_TRADE);
 						SendPacket(acceptTrade);
 						break;
 					case TradeStatus.Tradecomplete:
@@ -329,7 +329,7 @@ namespace BotFarm
 
 			var direction = remaining.Direction;
 
-			var facing = new MovementPacket(WorldCommand.MSG_MOVE_SET_FACING)
+			var facing = new MovementPacket(NetworkOperationCode.MSG_MOVE_SET_FACING)
 			{
 				GUID = Player.GUID,
 				flags = MovementFlags.MOVEMENTFLAG_FORWARD,
@@ -342,7 +342,7 @@ namespace BotFarm
 			SendPacket(facing);
 			Player.SetPosition(facing.GetPosition());
 
-			var startMoving = new MovementPacket(WorldCommand.MSG_MOVE_START_FORWARD)
+			var startMoving = new MovementPacket(NetworkOperationCode.MSG_MOVE_START_FORWARD)
 			{
 				GUID = Player.GUID,
 				flags = MovementFlags.MOVEMENTFLAG_FORWARD,
@@ -367,7 +367,7 @@ namespace BotFarm
 				{
 					oldRemaining = remaining;
 
-					var heartbeat = new MovementPacket(WorldCommand.MSG_MOVE_HEARTBEAT)
+					var heartbeat = new MovementPacket(NetworkOperationCode.MSG_MOVE_HEARTBEAT)
 					{
 						GUID = Player.GUID,
 						flags = MovementFlags.MOVEMENTFLAG_FORWARD,
@@ -380,7 +380,7 @@ namespace BotFarm
 				}
 				else
 				{
-					var stopMoving = new MovementPacket(WorldCommand.MSG_MOVE_STOP)
+					var stopMoving = new MovementPacket(NetworkOperationCode.MSG_MOVE_STOP)
 					{
 						GUID = Player.GUID,
 						X = Player.X,
@@ -398,7 +398,7 @@ namespace BotFarm
 			}, new TimeSpan(0, 0, 0, 0, 100), ActionFlag.Movement,
 			() =>
 			{
-				var stopMoving = new MovementPacket(WorldCommand.MSG_MOVE_STOP)
+				var stopMoving = new MovementPacket(NetworkOperationCode.MSG_MOVE_STOP)
 				{
 					GUID = Player.GUID,
 					X = Player.X,
@@ -412,7 +412,7 @@ namespace BotFarm
 
 		public void Resurrect()
 		{
-			OutPacket repop = new OutPacket(WorldCommand.CMSG_REPOP_REQUEST);
+			OutPacket repop = new OutPacket(NetworkOperationCode.CMSG_REPOP_REQUEST);
 			repop.Write((byte)0);
 			SendPacket(repop);
 		}

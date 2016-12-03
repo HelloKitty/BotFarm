@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using WoW.API;
 
 namespace Client.World.Network
 {
 	public class ServerHeader : Header
 	{
-		public WorldCommand Command { get; private set; }
+		public NetworkOperationCode Command { get; private set; }
 		public int Size { get; private set; }
 		public int InputDataLength { get; private set; }
 
@@ -17,12 +18,12 @@ namespace Client.World.Network
 			if (InputDataLength == 4)
 			{
 				Size = (int)(((uint)data[0]) << 8 | data[1]);
-				Command = (WorldCommand)BitConverter.ToUInt16(data, 2);
+				Command = (NetworkOperationCode)BitConverter.ToUInt16(data, 2);
 			}
 			else if (InputDataLength == 5)
 			{
 				Size = (int)(((((uint)data[0]) & 0x7F) << 16) | (((uint)data[1]) << 8) | data[2]);
-				Command = (WorldCommand)BitConverter.ToUInt16(data, 3);
+				Command = (NetworkOperationCode)BitConverter.ToUInt16(data, 3);
 			}
 			else
 				return;

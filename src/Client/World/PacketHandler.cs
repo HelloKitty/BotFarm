@@ -1,5 +1,6 @@
 ﻿using System;
 using Client.World.Network;
+using WoW.API;
 
 namespace Client.World
 {
@@ -8,9 +9,9 @@ namespace Client.World
 	[AttributeUsage(AttributeTargets.Method, AllowMultiple = true, Inherited = false)]
 	public sealed class PacketHandlerAttribute : Attribute
 	{
-		public WorldCommand Command { get; private set; }
+		public NetworkOperationCode Command { get; private set; }
 
-		public PacketHandlerAttribute(WorldCommand command)
+		public PacketHandlerAttribute(NetworkOperationCode command)
 		{
 			Command = command;
 		}

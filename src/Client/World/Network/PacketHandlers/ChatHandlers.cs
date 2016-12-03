@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using Client.Chat;
 using Client.Chat.Definitions;
+using WoW.API;
 
 namespace Client.World.Network
 {
 	public partial class WorldSocket
 	{
-		[PacketHandler(WorldCommand.SMSG_MESSAGECHAT)]
+		[PacketHandler(NetworkOperationCode.SMSG_MESSAGECHAT)]
 		protected void HandleMessageChat(InPacket packet)
 		{
 			var type = (ChatMessageType)packet.ReadByte();
@@ -82,7 +83,7 @@ namespace Client.World.Network
 						}
 
 						//! Furthermore we send CMSG_NAME_QUERY to the server to retrieve the name of the sender
-						OutPacket response = new OutPacket(WorldCommand.CMSG_NAME_QUERY);
+						OutPacket response = new OutPacket(NetworkOperationCode.CMSG_NAME_QUERY);
 						response.Write(sender);
 						Game.SendPacket(response);
 
@@ -95,7 +96,7 @@ namespace Client.World.Network
 			}
 		}
 
-		[PacketHandler(WorldCommand.SMSG_CHAT_PLAYER_NOT_FOUND)]
+		[PacketHandler(NetworkOperationCode.SMSG_CHAT_PLAYER_NOT_FOUND)]
 		protected void HandleChatPlayerNotFound(InPacket packet)
 		{
 			Game.UI.LogLine(String.Format("Player {0} not found!", packet.ReadCString()));

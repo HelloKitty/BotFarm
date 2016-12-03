@@ -123,7 +123,6 @@
     <Compile Include="World\Network\ServerHeader.cs" />
     <Compile Include="World\Network\WorldSocket.cs" />
     <Compile Include="World\PacketHandler.cs" />
-    <Compile Include="World\WorldCommand.cs" />
     <Compile Include="UI\IGameUI.cs" />
     <Compile Include="World\Definitions\Extensions.cs" />
   </ItemGroup>

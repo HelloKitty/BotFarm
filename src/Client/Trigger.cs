@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WoW.API;
 
 namespace Client
 {
@@ -65,7 +66,7 @@ namespace Client
 
 	public class OpcodeTriggerAction : TriggerAction
 	{
-		public WorldCommand Opcode
+		public NetworkOperationCode Opcode
 		{
 			get;
 			private set;
@@ -77,13 +78,13 @@ namespace Client
 			private set;
 		}
 
-		public OpcodeTriggerAction(WorldCommand Opcode, Action IntermediateAction = null)
+		public OpcodeTriggerAction(NetworkOperationCode Opcode, Action IntermediateAction = null)
 			: base(TriggerActionType.Opcode, IntermediateAction)
 		{
 			this.Opcode = Opcode;
 		}
 
-		public OpcodeTriggerAction(WorldCommand Opcode, Func<Packet, bool> PacketChecker, Action IntermediateAction = null)
+		public OpcodeTriggerAction(NetworkOperationCode Opcode, Func<Packet, bool> PacketChecker, Action IntermediateAction = null)
 			: base(TriggerActionType.Opcode, IntermediateAction)
 		{
 			this.Opcode = Opcode;
