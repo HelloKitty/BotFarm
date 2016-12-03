@@ -54,9 +54,8 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="cli, Version=1.0.5525.40058, Culture=neutral, processorArchitecture=AMD64">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\BotFarm\lib\cli.dll</HintPath>
+    <Reference Include="cli">
+      <HintPath>..\..\lib\cli.dll</HintPath>
     </Reference>
     <Reference Include="System" />
   </ItemGroup>

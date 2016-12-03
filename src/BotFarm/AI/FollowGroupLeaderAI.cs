@@ -1,5 +1,4 @@
 ﻿using Client;
-using Client.AI;
 using Client.World.Entities;
 using System;
 using System.Collections.Generic;
@@ -9,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace BotFarm.AI
 {
-	class FollowGroupLeaderAI : IStrategicAI
+	/*class FollowGroupLeaderAI : IStrategicAI
 	{
 		int scheduledAction;
 		AutomatedGame game;
@@ -64,5 +63,5 @@ namespace BotFarm.AI
 		public void Update()
 		{
 		}
-	}
+	}*/
 }

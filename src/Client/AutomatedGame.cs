@@ -18,7 +18,6 @@ using Client.World.Entities;
 using System.Collections;
 using DetourCLI;
 using MapCLI;
-using Client.AI;
 using WoW.API;
 
 namespace Client
@@ -98,9 +97,7 @@ namespace Client
         }
         UpdateObjectHandler updateObjectHandler;
 
-        Stack<IStrategicAI> StrategicAIs;
-        Stack<ITacticalAI> TacticalAIs;
-        Stack<IOperationalAI> OperationalAIs;
+		Stack<IGameAI> aiStateMachine;
 
         public Dictionary<ulong, WorldObject> Objects
         {
@@ -143,12 +140,6 @@ namespace Client
             Objects = new Dictionary<ulong, WorldObject>();
             CompletedAchievements = new HashSet<uint>();
             AchievementCriterias = new Dictionary<uint, ulong>();
-            StrategicAIs = new Stack<IStrategicAI>();
-            TacticalAIs = new Stack<ITacticalAI>();
-            OperationalAIs = new Stack<IOperationalAI>();
-            PushStrategicAI(new EmptyStrategicAI());
-            PushTacticalAI(new EmptyTacticalAI());
-            PushOperationalAI(new EmptyOperationalAI());
 
             this.Hostname = hostname;
             this.Port = port;
@@ -204,10 +195,6 @@ namespace Client
             if (World.SelectedCharacter == null)
                 return;
 
-            StrategicAIs.Peek().Update();
-            TacticalAIs.Peek().Update();
-            OperationalAIs.Peek().Update();
-
             while (scheduledActions.Count != 0)
             {
                 var scheduledAction = scheduledActions.First();
@@ -253,7 +240,6 @@ namespace Client
         public override async Task Exit()
         {
             ClearTriggers();
-            ClearAIs();
             if (LoggedIn)
             {
                 OutPacket logout = new OutPacket(WorldCommand.CMSG_LOGOUT_REQUEST);
@@ -440,86 +426,6 @@ namespace Client
                 return name;
             else
                 return "";
-        }
-
-        public bool PushStrategicAI(IStrategicAI ai) => PushAI(ai, StrategicAIs);
-        public bool PushTacticalAI(ITacticalAI ai) => PushAI(ai, TacticalAIs);
-        public bool PushOperationalAI(IOperationalAI ai) => PushAI(ai, OperationalAIs);
-        bool PushAI<T>(T ai, Stack<T> AIs) where T : IGameAI
-        {
-            if (AIs.Count == 0)
-            {
-                AIs.Push(ai);
-                if (ai.Activate(this))
-                    return true;
-                else
-                {
-                    AIs.Pop();
-                    return false;
-                }
-            }
-
-            var currentAI = AIs.Peek();
-            if (currentAI.AllowPause())
-            {
-                if (ai.GetType() == currentAI.GetType())
-                    return false;
-                else
-                {
-                    currentAI.Pause();
-                    AIs.Push(ai);
-                    if (ai.Activate(this))
-                        return true;
-                    else
-                    {
-                        AIs.Pop();
-                        currentAI.Resume();
-                        return false;
-                    }
-                }
-            }
-            else
-                return false;
-        }
-
-        public bool PopStrategicAI(IStrategicAI ai) => PopAI(ai, StrategicAIs);
-        public bool PopTacticalAI(ITacticalAI ai) => PopAI(ai, TacticalAIs);
-        public bool PopOperationalAI(IOperationalAI ai) => PopAI(ai, OperationalAIs);
-        public bool PopAI<T>(T ai, Stack<T> AIs) where T : class, IGameAI
-        {
-            if (AIs.Count <= 1)
-                return false;
-
-            var currentAI = AIs.Peek();
-            if (currentAI != ai)
-                return false;
-
-            currentAI.Deactivate();
-            AIs.Pop();
-
-            AIs.Peek().Resume();
-            return true;
-        }
-
-        public void ClearAIs()
-        {
-            while (StrategicAIs.Count > 1)
-            {
-                var currentAI = StrategicAIs.Pop();
-                currentAI.Deactivate();
-            }
-
-            while (TacticalAIs.Count > 1)
-            {
-                var currentAI = TacticalAIs.Pop();
-                currentAI.Deactivate();
-            }
-
-            while (OperationalAIs.Count > 1)
-            {
-                var currentAI = OperationalAIs.Pop();
-                currentAI.Deactivate();
-            }
         }
         #endregion
 

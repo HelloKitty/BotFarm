@@ -139,8 +139,7 @@ namespace BotFarm
 												username,
 												password,
 												Settings.Default.RealmID,
-												0,
-												botBehavior);
+												0);
 			game.SettingUp = true;
 			game.Start();
 			botInfos.Add(new BotInfo(username, password, botBehavior.Name));
@@ -155,8 +154,7 @@ namespace BotFarm
 												   info.Username,
 												   info.Password,
 												   Settings.Default.RealmID,
-												   0,
-												   botBehaviors[info.BehaviorName]);
+												   0);
 			game.Start();
 			return game;
 		}
@@ -266,7 +264,6 @@ namespace BotFarm
 		void DisplayStatistics(BotGame bot)
 		{
 			Console.WriteLine("Bot username: " + bot.Username);
-			Console.WriteLine("\tBehavior: " + bot.Behavior.Name);
 			Console.WriteLine("\tRunning: " + bot.Running);
 			Console.WriteLine("\tConnected: " + bot.Connected);
 			Console.WriteLine("\tLogged In: " + bot.LoggedIn);

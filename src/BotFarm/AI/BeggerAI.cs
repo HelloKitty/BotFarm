@@ -1,5 +1,4 @@
 ﻿using Client;
-using Client.AI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BotFarm.AI
 {
-	class BeggerAI : IStrategicAI
+	/*class BeggerAI : IStrategicAI
 	{
 		int scheduledAction;
 		int trigger;
@@ -72,5 +71,5 @@ namespace BotFarm.AI
 		public void Update()
 		{
 		}
-	}
+	}*/
 }

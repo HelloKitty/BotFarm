@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Text;
 using System.Threading;
-using Client;
-using Client.UI;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TrinityCore_UnitTests.Properties;
+using Client;
 
 namespace TrinityCore_UnitTests
 {

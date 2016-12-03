@@ -54,7 +54,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="cli">
-      <HintPath>..\BotFarm\lib\cli.dll</HintPath>
+      <HintPath>..\..\lib\cli.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -68,9 +68,6 @@
     <Reference Include="System.Configuration" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AI\ITacticalAI.cs" />
-    <Compile Include="AI\IStrategicAI.cs" />
-    <Compile Include="AI\IOperationalAI.cs" />
     <Compile Include="BatchQueue.cs" />
     <Compile Include="Authentication\AuthCommand.cs" />
     <Compile Include="Authentication\AuthResult.cs" />
