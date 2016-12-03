@@ -6,57 +6,57 @@ using System.IO;
 
 namespace Client.Crypto
 {
-    using CryptoNS = System.Security.Cryptography;
-    using HashAlgo = System.Security.Cryptography.HashAlgorithm;
+	using CryptoNS = System.Security.Cryptography;
+	using HashAlgo = System.Security.Cryptography.HashAlgorithm;
 
-    enum HashAlgorithm
-    {
-        SHA1,
-    }
+	enum HashAlgorithm
+	{
+		SHA1,
+	}
 
-    static class HashHelper
-    {
-        private delegate byte[] HashFunction(params byte[][] data);
+	static class HashHelper
+	{
+		private delegate byte[] HashFunction(params byte[][] data);
 
-        static Dictionary<HashAlgorithm, HashFunction> HashFunctions;
+		static Dictionary<HashAlgorithm, HashFunction> HashFunctions;
 
-        static HashHelper()
-        {
-            HashFunctions = new Dictionary<HashAlgorithm, HashFunction>();
+		static HashHelper()
+		{
+			HashFunctions = new Dictionary<HashAlgorithm, HashFunction>();
 
-            HashFunctions[HashAlgorithm.SHA1] = SHA1;
-        }
+			HashFunctions[HashAlgorithm.SHA1] = SHA1;
+		}
 
-        private static byte[] Combine(byte[][] buffers)
-        {
-            int length = 0;
-            foreach (var buffer in buffers)
-                length += buffer.Length;
+		private static byte[] Combine(byte[][] buffers)
+		{
+			int length = 0;
+			foreach (var buffer in buffers)
+				length += buffer.Length;
 
-            byte[] result = new byte[length];
+			byte[] result = new byte[length];
 
-            int position = 0;
+			int position = 0;
 
-            foreach (var buffer in buffers)
-            {
-                Buffer.BlockCopy(buffer, 0, result, position, buffer.Length);
-                position += buffer.Length;
-            }
+			foreach (var buffer in buffers)
+			{
+				Buffer.BlockCopy(buffer, 0, result, position, buffer.Length);
+				position += buffer.Length;
+			}
 
-            return result;
-        }
+			return result;
+		}
 
-        public static byte[] Hash(this HashAlgorithm algorithm, params byte[][] data)
-        {
-            return HashFunctions[algorithm](data);
-        }
+		public static byte[] Hash(this HashAlgorithm algorithm, params byte[][] data)
+		{
+			return HashFunctions[algorithm](data);
+		}
 
-        private static byte[] SHA1(params byte[][] data)
-        {
-            using (System.Security.Cryptography.SHA1 alg = CryptoNS.SHA1.Create())
-            {
-                return alg.ComputeHash(Combine(data));
-            }
-        }
-    }
+		private static byte[] SHA1(params byte[][] data)
+		{
+			using (System.Security.Cryptography.SHA1 alg = CryptoNS.SHA1.Create())
+			{
+				return alg.ComputeHash(Combine(data));
+			}
+		}
+	}
 }

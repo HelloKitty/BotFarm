@@ -5,8 +5,8 @@ using System.Text;
 
 namespace Client.World.Network
 {
-    public interface Packet
-    {
-        Header Header { get; }
-    }
+	public interface Packet
+	{
+		Header Header { get; }
+	}
 }

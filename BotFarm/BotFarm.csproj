@@ -37,7 +37,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x64\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;DEBUG_LOG</DefineConstants>
     <DebugType>full</DebugType>
     <PlatformTarget>x64</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
@@ -84,6 +84,7 @@
   <ItemGroup>
     <None Include="App.config">
       <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -94,6 +95,10 @@
     <ProjectReference Include="..\Client\Client.csproj">
       <Project>{7a45f050-e215-4388-b0be-f11001537a25}</Project>
       <Name>Client</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WoW.API\WoW.API.csproj">
+      <Project>{e48c7f9f-68b5-4f17-a6d6-a9e3e6da913b}</Project>
+      <Name>WoW.API</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

@@ -10,29 +10,29 @@ using System.Threading.Tasks;
 
 namespace Client
 {
-    public interface IGame
-    {
-        BigInteger Key { get; }
-        string Username { get; }
+	public interface IGame
+	{
+		BigInteger Key { get; }
+		string Username { get; }
 
-        IGameUI UI { get; }
+		IGameUI UI { get; }
 
-        GameWorld World { get; }
+		GameWorld World { get; }
 
-        void ConnectTo(WorldServerInfo server);
+		void ConnectTo(WorldServerInfo server);
 
-        void Start();
+		void Start();
 
-        void Reconnect();
+		void Reconnect();
 
-        void NoCharactersFound();
+		void NoCharactersFound();
 
-        void InvalidCredentials();
+		void InvalidCredentials();
 
-        Task Exit();
+		Task Exit();
 
-        void SendPacket(OutPacket packet);
+		void SendPacket(OutPacket packet);
 
-        void HandleTriggerInput(TriggerActionType type, params object[] inputs);
-    }
+		void HandleTriggerInput(TriggerActionType type, params object[] inputs);
+	}
 }

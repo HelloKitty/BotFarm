@@ -7,42 +7,42 @@ using System.Threading.Tasks;
 
 namespace Client.UI
 {
-    public abstract class IGameUI
-    {
-        public abstract IGame Game { get; set; }
+	public abstract class IGameUI
+	{
+		public abstract IGame Game { get; set; }
 
-        public abstract LogLevel LogLevel { get; set; }
+		public abstract LogLevel LogLevel { get; set; }
 
-        public abstract void Update();
-        public abstract Task Exit();
+		public abstract void Update();
+		public abstract Task Exit();
 
-        #region Packet handler presenters
+		#region Packet handler presenters
 
-        public abstract void PresentRealmList(WorldServerList realmList);
-        public abstract void PresentCharacterList(Character[] characterList);
+		public abstract void PresentRealmList(WorldServerList realmList);
+		public abstract void PresentCharacterList(Character[] characterList);
 
-        public abstract void PresentChatMessage(ChatMessage message);
+		public abstract void PresentChatMessage(ChatMessage message);
 
-        #endregion
+		#endregion
 
-        #region UI Output
+		#region UI Output
 
-        public abstract void Log(string message, LogLevel level = LogLevel.Info);
-        public abstract void LogLine(string message, LogLevel level = LogLevel.Info);
-        [Conditional("DEBUG")]
-        public abstract void LogDebug(string message);
-        public abstract void LogException(string message);
+		public abstract void Log(string message, LogLevel level = LogLevel.Info);
+		public abstract void LogLine(string message, LogLevel level = LogLevel.Info);
+		[Conditional("DEBUG")]
+		public abstract void LogDebug(string message);
+		public abstract void LogException(string message);
 
-        public abstract void LogException(Exception ex);
+		public abstract void LogException(Exception ex);
 
-        #endregion
+		#endregion
 
-        #region UI Input
+		#region UI Input
 
-        public abstract string ReadLine();
-        public abstract int Read();
-        public abstract ConsoleKeyInfo ReadKey();
+		public abstract string ReadLine();
+		public abstract int Read();
+		public abstract ConsoleKeyInfo ReadKey();
 
-        #endregion
-    }
+		#endregion
+	}
 }

@@ -19,6 +19,7 @@ using System.Collections;
 using DetourCLI;
 using MapCLI;
 using Client.AI;
+using WoW.API;
 
 namespace Client
 {
@@ -198,7 +199,7 @@ namespace Client
         {
             LastUpdate = DateTime.Now;
 
-            (socket as WorldSocket)?.HandlePackets();
+			(socket as WorldSocket)?.HandlePackets();
 
             if (World.SelectedCharacter == null)
                 return;
@@ -407,7 +408,7 @@ namespace Client
 
             foreach (var obj in Objects.Values)
             {
-                if (!obj.IsType(highGuidType))
+                if (!obj.GUID.isType(highGuidType))
                     continue;
 
                 if (additionalCheck != null && !additionalCheck(obj))
@@ -1136,7 +1137,7 @@ namespace Client
 #endif
                                 game.Objects[guid] = worldObject;
 
-                                if (worldObject.IsType(HighGuid.Player))
+                                if (worldObject.GUID.isType(HighGuid.Player))
                                 {
                                     OutPacket nameQuery = new OutPacket(WorldCommand.CMSG_NAME_QUERY);
                                     nameQuery.Write(guid);
@@ -1147,7 +1148,7 @@ namespace Client
                         default:
                             break;
                     }
-                }
+				}
 
                 foreach (var outOfRangeGuid in outOfRangeGuids)
                 {

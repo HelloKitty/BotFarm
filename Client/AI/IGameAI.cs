@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace Client
 {
-    public interface IGameAI
-    {
-        bool Activate(AutomatedGame game);
-        void Deactivate();
-        void Pause();
-        void Resume();
-        void Update();
-        bool AllowPause();
-    }
+	public interface IGameAI
+	{
+		bool Activate(AutomatedGame game);
+		void Deactivate();
+		void Pause();
+		void Resume();
+		void Update();
+		bool AllowPause();
+	}
 }
